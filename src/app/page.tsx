@@ -1,17 +1,27 @@
 "use client"; // This is a client component
 import { useState } from "react";
 
+interface Recipe {
+  Calories: string;
+  CookTime?: string;
+  Name: string;
+  PrepTime?: string;
+  RecipeServings?: string;
+  TotalTime?: string;
+  id: string;
+}
+
 export default function Home() {
-  const [result, setResult] = useState(null);
-  const [loading, setLoading] = useState(false); // Added loading state
+  const [result, setResult] = useState<Recipe[] | null>(null); // Typed state
+  const [loading, setLoading] = useState(false);
   const apiEndpoint = "https://taste-trios-back-end.vercel.app/api/neo4j-data";
 
   function runQuery() {
     console.log("Running a query");
-    setLoading(true); // Start loading
+    setLoading(true);
     fetch(apiEndpoint)
       .then((res) => res.json())
-      .then((data) => {
+      .then((data: Recipe[]) => {
         console.log("Data:", data);
         setResult(data);
       })
@@ -19,7 +29,7 @@ export default function Home() {
         console.error("Error:", err);
       })
       .finally(() => {
-        setLoading(false); // Stop loading
+        setLoading(false);
       });
   }
 
@@ -54,7 +64,7 @@ export default function Home() {
             <button
               className="bg-blue-500 px-6 py-2 rounded-full shadow-md hover:bg-blue-700"
               onClick={runQuery}
-              disabled={loading} // Disable button while loading
+              disabled={loading}
             >
               {loading ? "Loading..." : "RUN QUERY"}
             </button>
