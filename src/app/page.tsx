@@ -12,8 +12,17 @@ interface Recipe {
   id: string;
 }
 
+interface Match {
+  matchingScore: number;
+  recipe: Recipe;
+}
+
+interface QueryResult {
+  recipes: Match[];
+}
+
 export default function Home() {
-  const [result, setResult] = useState<Recipe[] | null>(null); // Typed state
+  const [result, setResult] = useState<Match[] | null>(null); // Typed state
   const [loading, setLoading] = useState(false);
   const [ingredients, setIngredients] = useState<string[]>([]);
   const apiEndpoint = "https://taste-trios-back-end.vercel.app/api/neo4j/matchIngredients";
@@ -21,11 +30,20 @@ export default function Home() {
   function runQuery() {
     console.log("Running a query");
     setLoading(true);
-    fetch(apiEndpoint)
+    fetch(apiEndpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ingredients: ingredients,
+        limit: 20,
+      }),
+    })
       .then((res) => res.json())
-      .then((data: Recipe[]) => {
+      .then((data: QueryResult) => {
         console.log("Data:", data);
-        setResult(data);
+        setResult(data.recipes);
       })
       .catch((err) => {
         console.error("Error:", err);
@@ -82,8 +100,8 @@ export default function Home() {
             )}
             {result && !loading && (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-                {result.map((recipe) => (
-                  <RecipeCard key={recipe.id} title={recipe.Name} />
+                {result.map((match) => (
+                  <RecipeCard key={match.recipe.id} title={match.recipe.Name + " - " + match.matchingScore} />
                 ))}
               </div>
             )}
