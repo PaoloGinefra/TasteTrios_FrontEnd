@@ -5,13 +5,16 @@ import Ingredient from "./Ingredient";
 interface IngredientSelectorProps {
     ingredients: string[];
     setIngredients: (ingredients: string[]) => void;
+    runQuery: (ingredients: string[]) => void;
 }
 
-export default function IngredientSelector({ ingredients, setIngredients }: IngredientSelectorProps) {
+export default function IngredientSelector({ ingredients, setIngredients, runQuery }: IngredientSelectorProps) {
     const apiEndpoint = "https://taste-trios-back-end.vercel.app/api/neo4j/checkIngredient"
     const [currentIngredient, setCurrentIngredient] = useState<string>("");
     const removeIngredient = (name: string) => {
-        setIngredients(ingredients.filter((ingredient) => ingredient !== name));
+        const newIngredients = ingredients.filter((ingredient) => ingredient !== name);
+        setIngredients(newIngredients);
+        runQuery(newIngredients);
     }
 
     function addIngredient() {
@@ -36,8 +39,10 @@ export default function IngredientSelector({ ingredients, setIngredients }: Ingr
             .then((data) => {
                 console.log("Data:", data);
                 if (data.exists) {
-                    setIngredients([...ingredients, currentIngredient]);
+                    const newIngredients = [...ingredients, currentIngredient];
+                    setIngredients(newIngredients);
                     setCurrentIngredient("");
+                    runQuery(newIngredients);
                 } else {
                     alert("Invalid ingredient");
                 }

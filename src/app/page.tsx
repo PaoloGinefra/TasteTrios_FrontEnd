@@ -29,7 +29,7 @@ export default function Home() {
   const [limit, setLimit] = useState(20);
   const apiEndpoint = "https://taste-trios-back-end.vercel.app/api/neo4j/matchIngredients";
 
-  function runQuery() {
+  function runQuery(ingredients: string[]) {
     console.log("Running a query");
     setLoading(true);
     fetch(apiEndpoint, {
@@ -82,11 +82,11 @@ export default function Home() {
           <p className="text-lg mb-8">
             Your one-stop solution for modern web design and development.
           </p>
-          <IngredientSelector ingredients={ingredients} setIngredients={setIngredients} />
+          <IngredientSelector ingredients={ingredients} setIngredients={setIngredients} runQuery={runQuery} />
           <div className="space-x-4">
             <button
               className="bg-blue-500 px-6 py-2 rounded-full shadow-md hover:bg-blue-700"
-              onClick={runQuery}
+              onClick={() => runQuery(ingredients)}
               disabled={loading}
             >
               {loading ? "Loading..." : "RUN QUERY"}
@@ -110,7 +110,7 @@ export default function Home() {
                   className="col-span-full"
                   onClick={() => {
                     setLimit((prev) => prev + 10)
-                    runQuery()
+                    runQuery(ingredients)
                   }}
                   placeholder=""
                   onPointerEnterCapture={() => { }}
