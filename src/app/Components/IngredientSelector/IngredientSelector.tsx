@@ -40,41 +40,46 @@ export default function IngredientSelector({ ingredients, setIngredients }: Ingr
             );
     }
 
-    return (<div>
-        <div className="flex flex-row justify-center">
-            <div className="relative flex w-full max-w-[24rem]">
-                <Input
-                    type="email"
-                    label="Ingredient"
-                    className="pr-20"
-                    containerProps={{
-                        className: "min-w-0",
-                    }}
-                    onPointerEnterCapture={() => { }}
-                    onPointerLeaveCapture={() => { }}
-                    crossOrigin=""
-                    value={currentIngredient}
-                    onChange={(e) => setCurrentIngredient(e.target.value)}
-                />
-                <Button
-                    size="sm"
-                    className="!absolute right-1 top-1 rounded"
-                    placeholder=""
-                    onPointerEnterCapture={() => { }}
-                    onPointerLeaveCapture={() => { }}
-                    onClick={() => {
-                        addIngredient();
-                    }}
-                >
-                    Add
-                </Button>
+    return (
+        <div>
+            <form
+                onSubmit={(e) => {
+                    e.preventDefault();
+                    addIngredient();
+                }}
+                className="flex flex-row justify-center"
+            >
+                <div className="relative flex w-full max-w-[24rem]">
+                    <Input
+                        type="text"
+                        label="Ingredient"
+                        className="pr-20"
+                        containerProps={{
+                            className: "min-w-0",
+                        }}
+                        onPointerEnterCapture={() => { }}
+                        onPointerLeaveCapture={() => { }}
+                        crossOrigin=""
+                        value={currentIngredient}
+                        onChange={(e) => setCurrentIngredient(e.target.value)}
+                    />
+                    <Button
+                        type="submit"
+                        size="sm"
+                        className="!absolute right-1 top-1 rounded"
+                        placeholder=""
+                        onPointerEnterCapture={() => { }}
+                        onPointerLeaveCapture={() => { }}
+                    >
+                        Add
+                    </Button>
+                </div>
+            </form>
+            <div className="flex flex-row justify-center mt-4">
+                {ingredients.map((ingredient, index) => (
+                    <Ingredient key={index} name={ingredient} removeIngredient={removeIngredient} />
+                ))}
             </div>
         </div>
-        <div className="flex flex-row justify-center mt-4">
-            {ingredients.map((ingredient, index) => (
-                <Ingredient key={index} name={ingredient} removeIngredient={removeIngredient} />
-            ))}
-        </div>
-    </div >
     );
 }
