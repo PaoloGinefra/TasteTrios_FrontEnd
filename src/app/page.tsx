@@ -2,6 +2,7 @@
 import { useState } from "react";
 import RecipeCard from "./Components/Recipe";
 import IngredientSelector from "./Components/IngredientSelector/IngredientSelector";
+import { Button } from "@material-tailwind/react";
 interface Recipe {
   Calories: string;
   CookTime?: string;
@@ -25,6 +26,7 @@ export default function Home() {
   const [result, setResult] = useState<Match[] | null>(null); // Typed state
   const [loading, setLoading] = useState(false);
   const [ingredients, setIngredients] = useState<string[]>([]);
+  const [limit, setLimit] = useState(20);
   const apiEndpoint = "https://taste-trios-back-end.vercel.app/api/neo4j/matchIngredients";
 
   function runQuery() {
@@ -37,7 +39,7 @@ export default function Home() {
       },
       body: JSON.stringify({
         ingredients: ingredients,
-        limit: 20,
+        limit: limit,
       }),
     })
       .then((res) => res.json())
@@ -103,6 +105,19 @@ export default function Home() {
                 {result.map((match) => (
                   <RecipeCard key={match.recipe.id} title={match.recipe.Name + " - " + match.matchingScore} />
                 ))}
+                <Button
+                  color="blue"
+                  className="col-span-full"
+                  onClick={() => {
+                    setLimit((prev) => prev + 10)
+                    runQuery()
+                  }}
+                  placeholder=""
+                  onPointerEnterCapture={() => { }}
+                  onPointerLeaveCapture={() => { }}
+                >
+                  Load More
+                </Button>
               </div>
             )}
           </div>
