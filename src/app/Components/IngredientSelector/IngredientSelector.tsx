@@ -15,6 +15,14 @@ export default function IngredientSelector({ ingredients, setIngredients }: Ingr
     }
 
     function addIngredient() {
+        if (currentIngredient === "") {
+            return;
+        }
+        if (ingredients.includes(currentIngredient)) {
+            alert("Ingredient already added");
+            setCurrentIngredient("");
+            return;
+        }
         fetch(apiEndpoint, {
             method: "POST",
             headers: {
@@ -36,6 +44,7 @@ export default function IngredientSelector({ ingredients, setIngredients }: Ingr
             })
             .catch((err) => {
                 console.error("Error:", err);
+                setCurrentIngredient("");
             }
             );
     }
@@ -61,7 +70,8 @@ export default function IngredientSelector({ ingredients, setIngredients }: Ingr
                         onPointerLeaveCapture={() => { }}
                         crossOrigin=""
                         value={currentIngredient}
-                        onChange={(e) => setCurrentIngredient(e.target.value)}
+                        onChange={(e) => setCurrentIngredient(e.target.value.toLowerCase())}
+                        color="white"
                     />
                     <Button
                         type="submit"
