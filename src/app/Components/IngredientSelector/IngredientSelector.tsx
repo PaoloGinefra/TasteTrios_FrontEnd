@@ -1,0 +1,80 @@
+import { Input, Button } from "@material-tailwind/react";
+import { useState } from "react";
+import Ingredient from "./Ingredient";
+
+interface IngredientSelectorProps {
+    ingredients: string[];
+    setIngredients: (ingredients: string[]) => void;
+}
+
+export default function IngredientSelector({ ingredients, setIngredients }: IngredientSelectorProps) {
+    const apiEndpoint = "https://taste-trios-back-end.vercel.app/api/neo4j/checkIngredient"
+    const [currentIngredient, setCurrentIngredient] = useState<string>("");
+    const removeIngredient = (name: string) => {
+        setIngredients(ingredients.filter((ingredient) => ingredient !== name));
+    }
+
+    function addIngredient() {
+        fetch(apiEndpoint, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                ingredient: currentIngredient,
+            }),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                console.log("Data:", data);
+                if (data.exists) {
+                    setIngredients([...ingredients, currentIngredient]);
+                    setCurrentIngredient("");
+                } else {
+                    alert("Invalid ingredient");
+                }
+            })
+            .catch((err) => {
+                console.error("Error:", err);
+            }
+            );
+    }
+
+    return (<div>
+        <div className="flex flex-row justify-center">
+            <div className="relative flex w-full max-w-[24rem]">
+                <Input
+                    type="email"
+                    label="Ingredient"
+                    className="pr-20"
+                    containerProps={{
+                        className: "min-w-0",
+                    }}
+                    onPointerEnterCapture={() => { }}
+                    onPointerLeaveCapture={() => { }}
+                    crossOrigin=""
+                    value={currentIngredient}
+                    onChange={(e) => setCurrentIngredient(e.target.value)}
+                />
+                <Button
+                    size="sm"
+                    className="!absolute right-1 top-1 rounded"
+                    placeholder=""
+                    onPointerEnterCapture={() => { }}
+                    onPointerLeaveCapture={() => { }}
+                    onClick={() => {
+                        addIngredient();
+                    }}
+                >
+                    Add
+                </Button>
+            </div>
+        </div>
+        <div className="flex flex-row justify-center mt-4">
+            {ingredients.map((ingredient, index) => (
+                <Ingredient key={index} name={ingredient} removeIngredient={removeIngredient} />
+            ))}
+        </div>
+    </div >
+    );
+}

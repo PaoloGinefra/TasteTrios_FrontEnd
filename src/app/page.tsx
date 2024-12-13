@@ -15,7 +15,8 @@ interface Recipe {
 export default function Home() {
   const [result, setResult] = useState<Recipe[] | null>(null); // Typed state
   const [loading, setLoading] = useState(false);
-  const apiEndpoint = "https://taste-trios-back-end.vercel.app/api/neo4j/data";
+  const [ingredients, setIngredients] = useState<string[]>([]);
+  const apiEndpoint = "https://taste-trios-back-end.vercel.app/api/neo4j/matchIngredients";
 
   function runQuery() {
     console.log("Running a query");
@@ -61,7 +62,7 @@ export default function Home() {
           <p className="text-lg mb-8">
             Your one-stop solution for modern web design and development.
           </p>
-          <IngredientSelector />
+          <IngredientSelector ingredients={ingredients} setIngredients={setIngredients} />
           <div className="space-x-4">
             <button
               className="bg-blue-500 px-6 py-2 rounded-full shadow-md hover:bg-blue-700"
