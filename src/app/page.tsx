@@ -1,6 +1,6 @@
 "use client"; // This is a client component
 import { useState } from "react";
-
+import RecipeCard from "./Components/Recipe";
 interface Recipe {
   Calories: string;
   CookTime?: string;
@@ -80,29 +80,7 @@ export default function Home() {
             {result && !loading && (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
                 {result.map((recipe) => (
-                  <div
-                    key={recipe.id}
-                    className="bg-white rounded-lg shadow-md p-4 text-left"
-                  >
-                    <h3 className="text-xl font-bold text-blue-600 mb-2">
-                      {recipe.Name}
-                    </h3>
-                    <p className="text-gray-700">
-                      <strong>Calories:</strong> {recipe.Calories}
-                    </p>
-                    <p className="text-gray-700">
-                      <strong>Servings:</strong> {recipe.RecipeServings || "N/A"}
-                    </p>
-                    <p className="text-gray-700">
-                      <strong>Prep Time:</strong> {recipe.PrepTime || "N/A"}
-                    </p>
-                    <p className="text-gray-700">
-                      <strong>Cook Time:</strong> {recipe.CookTime || "N/A"}
-                    </p>
-                    <p className="text-gray-700">
-                      <strong>Total Time:</strong> {recipe.TotalTime || "N/A"}
-                    </p>
-                  </div>
+                  <RecipeCard key={recipe.id} title={recipe.Name} />
                 ))}
               </div>
             )}
