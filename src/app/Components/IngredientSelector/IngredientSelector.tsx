@@ -55,7 +55,7 @@ export default function IngredientSelector({ ingredients, setIngredients, runQue
     }
 
     return (
-        <div>
+        <div className="flex flex-col items-center">
             <form
                 onSubmit={(e) => {
                     e.preventDefault();
@@ -90,10 +90,13 @@ export default function IngredientSelector({ ingredients, setIngredients, runQue
                     </Button>
                 </div>
             </form>
-            <div className="flex flex-row justify-center mt-4">
-                {ingredients.map((ingredient, index) => (
-                    <Ingredient key={index} name={ingredient} removeIngredient={removeIngredient} />
-                ))}
+            <div className="flex flex-col justify-center mt-4 border border-white p-1 rounded-xl max-w-[24rem]">
+                <h3 className="text-white p-3">SELECTED INGREDIENTS:</h3>
+                <div className="flex flex-row justify-center m-2 gap-1 max-w-[24rem] flex-wrap">
+                    {ingredients.map((ingredient, index) => (
+                        <Ingredient key={index} name={ingredient} removeIngredient={removeIngredient} />
+                    ))}
+                </div>
             </div>
         </div>
     );
