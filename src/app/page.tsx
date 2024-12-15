@@ -3,6 +3,10 @@ import { useState } from "react";
 import RecipeCard from "./Components/Recipe";
 import IngredientSelector from "./Components/IngredientSelector/IngredientSelector";
 import { Button } from "@material-tailwind/react";
+import { FeatureCard } from "./Components/FeatureCard";
+import { FaSearch } from "react-icons/fa";
+
+
 interface Recipe {
   Calories: string;
   CookTime?: string;
@@ -56,32 +60,16 @@ export default function Home() {
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen">
-      {/* Navbar */}
-      <nav className="bg-white shadow-lg">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-blue-600">MyWebsite</h1>
-          <div className="space-x-4">
-            <a href="#" className="text-gray-600 hover:text-blue-600">
-              Home
-            </a>
-            <a href="#" className="text-gray-600 hover:text-blue-600">
-              About
-            </a>
-            <a href="#" className="text-gray-600 hover:text-blue-600">
-              Contact
-            </a>
-          </div>
-        </div>
-      </nav>
-
-      {/* Hero Section */}
-      <section className="flex items-center justify-center text-center bg-blue-600 text-white py-20">
+    <div className="bg-black min-h-screen">
+      <section className="flex items-center justify-center text-center text-white py-20">
         <div>
-          <h2 className="text-4xl font-bold mb-4">Welcome to MyWebsite</h2>
+          <h2 className="text-4xl font-bold mb-4">TASTE TRIOS</h2>
           <p className="text-lg mb-8">
             Your one-stop solution for modern web design and development.
           </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <FeatureCard featureName="Search" description="Ciao ciao ciao" featureRoute="/ciao" icon={FaSearch} />
+          </div>
           <IngredientSelector ingredients={ingredients} setIngredients={setIngredients} runQuery={runQuery} />
           <div className="space-x-4">
             <button
