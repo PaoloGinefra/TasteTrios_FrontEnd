@@ -136,6 +136,24 @@ export default function RecipeCard({ match }: RecipeProps) {
                         </Tooltip>
                     }
 
+                    {
+                        match.recipe.Keywords !== "" &&
+                        <>
+                            {
+                                interpretCombinedString(match.recipe.Keywords || "").map((keyword, index) => (
+                                    <Tooltip key={index} content="Keyword" placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}
+                                        animate={{
+                                            mount: { scale: 1, y: 0 },
+                                            unmount: { scale: 0, y: 25 },
+                                        }}>
+                                        <Chip className="p-2  px-3" value={keyword} />
+                                    </Tooltip>
+                                ))
+                            }
+                        </>
+
+
+                    }
 
 
                 </CardFooter>
@@ -148,21 +166,6 @@ export default function RecipeCard({ match }: RecipeProps) {
                 </DialogHeader>
                 <DialogBody placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}>
                     <div className="text-left overflow-y-scroll h-[90%]">
-                        {
-                            match.recipe.Keywords !== "" &&
-                            <>
-                                <Typography variant="h6" color="blue-gray" className="mb-2" placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}>
-                                    Keywords
-                                </Typography>
-                                <div className="flex gap-2 mb-2 flex-wrap">
-                                    {
-                                        interpretCombinedString(match.recipe.Keywords || "").map((keyword, index) => (
-                                            <Chip key={index} className="p-2  px-3" value={keyword} />
-                                        ))
-                                    }
-                                </div>
-                            </>
-                        }
 
                         {
                             match.recipe.RecipeIngredientParts !== "" &&
