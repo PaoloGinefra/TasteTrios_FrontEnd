@@ -7,12 +7,17 @@ import { Button } from "@material-tailwind/react";
 
 export interface Recipe {
     Calories: string;
-    CookTime?: number[];
+    CookTime?: number;
     Name: string;
-    PrepTime?: number[];
+    PrepTime?: number;
     RecipeServings?: string;
-    TotalTime?: number[];
-    id: string;
+    TotalTime?: number;
+    RecipeId: string;
+    Description: string;
+    RecipeIngredientParts: string;
+    RecipeIngredientQuantities: string;
+    RecipeInstructions: string;
+    AggregatedRating?: number;
 }
 
 export interface Match {
@@ -30,7 +35,7 @@ export default function Home() {
     const [loading, setLoading] = useState(false);
     const [ingredients, setIngredients] = useState<string[]>([]);
     const [limit, setLimit] = useState(20);
-    const apiEndpoint = "https://taste-trios-back-end.vercel.app/api/neo4j/matchIngredients";
+    const apiEndpoint = "https://taste-trios-back-end.vercel.app/api/elasticsearch/matchIngredients";
 
     function runQuery(ingredients: string[]) {
         console.log("Running a query");
@@ -78,7 +83,7 @@ export default function Home() {
                         {result && !loading && (
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                                 {result.map((match) => (
-                                    <RecipeCard key={match.recipe.id} match={match} />
+                                    <RecipeCard key={match.recipe.RecipeId} match={match} />
                                 ))}
                                 <Button
                                     className="col-span-full"

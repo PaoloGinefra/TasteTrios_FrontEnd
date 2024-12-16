@@ -24,35 +24,33 @@ interface RecipeProps {
 
 export default function RecipeCard({ match }: RecipeProps) {
     const [open, setOpen] = useState(false);
-    const [ingredients, setIngredients] = useState<string[]>([]);
     const handleOpen = () => setOpen(!open);
-    const apiEndpoint = "https://taste-trios-back-end.vercel.app/api/neo4j/getIngredients";
 
-    function getIngredients() {
-        fetch(apiEndpoint, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                recipeId: match.recipe.id,
-            }),
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                console.log("Data:", data);
-                setIngredients(data.ingredients);
-            })
-            .catch((err) => {
-                console.error("Error:", err);
-            });
+    function interpretCombinedString(ingredients: string) {
+        // Regular expression to extract the arguments from the function
+        const regex = /c\(([^)]+)\)/;
+
+        // Match the function arguments
+        const match = ingredients.match(regex);
+
+        // If match is found, split the arguments and remove the extra quotes and whitespace
+        if (match) {
+            const argumentsString = match[1]; // Get the content inside the parentheses
+            const argumentsArray = argumentsString
+                .split("\",") // Split by commas
+                .map(arg => arg.trim().replace(/"/g, '')); // Remove extra spaces and quotes
+
+            return argumentsArray; // Output the parsed array
+        }
+        return [];
     }
 
-    useEffect(() => {
-        if (open) {
-            getIngredients();
-        }
-    }, [match, open]);
+    function interpretIngredientsAndQuantities(ingredients: string, quantities: string) {
+        const ingredientsArray = interpretCombinedString(ingredients);
+        const quantitiesArray = interpretCombinedString(quantities);
+
+        return ingredientsArray.map((ingredient, index) => `${quantitiesArray[index]} - ${ingredient}`);
+    }
 
     return (
         <>
@@ -61,8 +59,8 @@ export default function RecipeCard({ match }: RecipeProps) {
                     <Typography variant="h5" color="blue-gray" className="mb-2" placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}>
                         {match.recipe.Name}
                     </Typography>
-                    <Typography placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}>
-                        {match.matchingIngredients.join(", ")}
+                    <Typography className="line-clamp-1 overflow-hidden" placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}>
+                        {match.recipe.Description}
                     </Typography>
                 </CardBody>
                 <CardFooter className="pt-0 flex gap-2 flex-wrap justify-center" placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}>
@@ -79,7 +77,7 @@ export default function RecipeCard({ match }: RecipeProps) {
                         />
                     </Tooltip>
                     {
-                        match.recipe.PrepTime &&
+                        match.recipe.PrepTime != null &&
                         <Tooltip content="Prep Time" placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}
                             animate={{
                                 mount: { scale: 1, y: 0 },
@@ -87,14 +85,14 @@ export default function RecipeCard({ match }: RecipeProps) {
                             }}>
                             <Chip
                                 className="p-2  px-3"
-                                value={match.recipe.PrepTime[2] + " mins"}
+                                value={match.recipe.PrepTime + " mins"}
                                 icon={<RiKnifeFill className="text-xl" />}
                             />
                         </Tooltip>
                     }
 
                     {
-                        match.recipe.CookTime &&
+                        match.recipe.CookTime != null &&
                         <Tooltip content="Cook Time" placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}
                             animate={{
                                 mount: { scale: 1, y: 0 },
@@ -102,14 +100,14 @@ export default function RecipeCard({ match }: RecipeProps) {
                             }}>
                             <Chip
                                 className="p-2  px-3"
-                                value={match.recipe.CookTime[2] + " mins"}
+                                value={match.recipe.CookTime + " mins"}
                                 icon={<PiCookingPotFill className="text-xl" />}
                             />
                         </Tooltip>
                     }
 
                     {
-                        match.recipe.RecipeServings &&
+                        match.recipe.RecipeServings != null &&
                         <Tooltip content="Servings" placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}
                             animate={{
                                 mount: { scale: 1, y: 0 },
@@ -119,6 +117,21 @@ export default function RecipeCard({ match }: RecipeProps) {
                                 className="p-2  px-3"
                                 value={match.recipe.RecipeServings}
                                 icon={<FaPeopleGroup className="text-xl" />}
+                            />
+                        </Tooltip>
+                    }
+
+                    {
+                        match.recipe.AggregatedRating != null &&
+                        <Tooltip content="Average Rating" placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}
+                            animate={{
+                                mount: { scale: 1, y: 0 },
+                                unmount: { scale: 0, y: 25 },
+                            }}>
+                            <Chip
+                                className="p-2  px-3"
+                                value={match.recipe.AggregatedRating}
+                                icon={"⭐"}
                             />
                         </Tooltip>
                     }
@@ -134,12 +147,33 @@ export default function RecipeCard({ match }: RecipeProps) {
                     {match.recipe.Name}
                 </DialogHeader>
                 <DialogBody placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}>
-                    Ingredients:
-                    <ul>
-                        {ingredients.map((ingredient) => (
-                            <li key={ingredient}>{ingredient}</li>
-                        ))}
-                    </ul>
+                    <div className="text-left overflow-y-scroll h-[90%]">
+                        {
+                            match.recipe.RecipeIngredientParts !== "" &&
+                            <>
+                                <Typography variant="h6" color="blue-gray" className="mb-2" placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}>
+                                    Ingredients
+                                </Typography>
+                                <ul className="list-disc pl-6">
+                                    {
+                                        interpretIngredientsAndQuantities(match.recipe.RecipeIngredientParts, match.recipe.RecipeIngredientQuantities).map((ingredient, index) => (
+                                            <li key={index}>{ingredient}</li>
+                                        ))}
+                                </ul>
+                            </>
+                        }
+
+                        <Typography variant="h6" color="blue-gray" className="mb-2 mt-4" placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}>
+                            Steps:
+                        </Typography>
+                        <ol className="list-decimal pl-6">
+                            {
+                                interpretCombinedString(match.recipe.RecipeInstructions).map((step, index) => (
+                                    <li key={index}>{step}</li>
+                                ))
+                            }
+                        </ol>
+                    </div>
                 </DialogBody>
             </Dialog>
         </>
