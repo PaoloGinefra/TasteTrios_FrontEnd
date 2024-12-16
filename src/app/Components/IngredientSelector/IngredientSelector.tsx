@@ -90,7 +90,7 @@ export default function IngredientSelector({ ingredients, setIngredients, runQue
                     </Button>
                 </div>
             </form>
-            <div className="flex flex-col justify-center mt-4 border border-2 border-white p-1 rounded-xl max-w-[24rem]">
+            <div className="flex flex-col justify-center mt-4 border-2 border-white p-1 rounded-xl max-w-[24rem]">
                 <Typography className="mx-4" variant="h5" placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} >Selected Ingredients</Typography>
                 <div className="flex flex-row justify-center m-2 gap-1 max-w-[24rem] flex-wrap">
                     {ingredients.map((ingredient, index) => (
