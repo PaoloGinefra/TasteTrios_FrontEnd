@@ -10,7 +10,7 @@ import {
     Chip,
     Tooltip
 } from "@material-tailwind/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Match } from "../Pan-tryItOut/page";
 import { FaFireAlt } from "react-icons/fa";
 import { RiKnifeFill } from "react-icons/ri";
@@ -148,6 +148,22 @@ export default function RecipeCard({ match }: RecipeProps) {
                 </DialogHeader>
                 <DialogBody placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}>
                     <div className="text-left overflow-y-scroll h-[90%]">
+                        {
+                            match.recipe.Keywords !== "" &&
+                            <>
+                                <Typography variant="h6" color="blue-gray" className="mb-2" placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}>
+                                    Keywords
+                                </Typography>
+                                <div className="flex gap-2 mb-2 flex-wrap">
+                                    {
+                                        interpretCombinedString(match.recipe.Keywords || "").map((keyword, index) => (
+                                            <Chip key={index} className="p-2  px-3" value={keyword} />
+                                        ))
+                                    }
+                                </div>
+                            </>
+                        }
+
                         {
                             match.recipe.RecipeIngredientParts !== "" &&
                             <>

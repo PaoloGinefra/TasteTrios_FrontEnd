@@ -18,6 +18,7 @@ export interface Recipe {
     RecipeIngredientQuantities: string;
     RecipeInstructions: string;
     AggregatedRating?: number;
+    Keywords?: string;
 }
 
 export interface Match {
