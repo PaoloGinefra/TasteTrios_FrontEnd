@@ -1,4 +1,4 @@
-import { Input, Button } from "@material-tailwind/react";
+import { Input, Button, Typography } from "@material-tailwind/react";
 import { useState } from "react";
 import Ingredient from "./Ingredient";
 
@@ -90,8 +90,8 @@ export default function IngredientSelector({ ingredients, setIngredients, runQue
                     </Button>
                 </div>
             </form>
-            <div className="flex flex-col justify-center mt-4 border border-white p-1 rounded-xl max-w-[24rem]">
-                <h3 className="text-white p-3">SELECTED INGREDIENTS:</h3>
+            <div className="flex flex-col justify-center mt-4 border border-2 border-white p-1 rounded-xl max-w-[24rem]">
+                <Typography className="mx-4" variant="h5" placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} >Selected Ingredients</Typography>
                 <div className="flex flex-row justify-center m-2 gap-1 max-w-[24rem] flex-wrap">
                     {ingredients.map((ingredient, index) => (
                         <Ingredient key={index} name={ingredient} removeIngredient={removeIngredient} />

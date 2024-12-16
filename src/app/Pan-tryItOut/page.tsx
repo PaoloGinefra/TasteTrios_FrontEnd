@@ -5,19 +5,20 @@ import IngredientSelector from "../Components/IngredientSelector/IngredientSelec
 import { Button } from "@material-tailwind/react";
 
 
-interface Recipe {
+export interface Recipe {
     Calories: string;
-    CookTime?: string;
+    CookTime?: number[];
     Name: string;
-    PrepTime?: string;
+    PrepTime?: number[];
     RecipeServings?: string;
-    TotalTime?: string;
+    TotalTime?: number[];
     id: string;
 }
 
-interface Match {
+export interface Match {
     matchingScore: number;
     recipe: Recipe;
+    matchingIngredients: string[];
 }
 
 interface QueryResult {
@@ -66,7 +67,7 @@ export default function Home() {
                         Insert your ingredients and we will find the best recipes for you
                     </p>
                     <IngredientSelector ingredients={ingredients} setIngredients={setIngredients} runQuery={runQuery} />
-                    <div className="mt-6">
+                    <div className="mt-6 border-4 rounded-xl p-4">
                         {loading && (
                             <div className="flex items-center justify-center space-x-2">
                                 <div className="w-4 h-4 rounded-full bg-white animate-pulse"></div>
@@ -75,12 +76,11 @@ export default function Home() {
                             </div>
                         )}
                         {result && !loading && (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                                 {result.map((match) => (
-                                    <RecipeCard key={match.recipe.id} title={match.recipe.Name + " - " + match.matchingScore} />
+                                    <RecipeCard key={match.recipe.id} match={match} />
                                 ))}
                                 <Button
-                                    color="blue"
                                     className="col-span-full"
                                     onClick={() => {
                                         setLimit((prev) => prev + 10)
