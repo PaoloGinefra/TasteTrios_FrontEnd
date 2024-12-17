@@ -39,7 +39,7 @@ export default function IngredientCard({ match }: IngredientProps) {
                         />
                     </Tooltip>
 
-                    <Tooltip content="Average Rating" placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}
+                    <Tooltip content="Average Rating of matched Recipes" placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}
                         animate={{
                             mount: { scale: 1, y: 0 },
                             unmount: { scale: 0, y: 25 },
