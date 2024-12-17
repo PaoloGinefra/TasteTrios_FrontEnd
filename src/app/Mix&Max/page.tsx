@@ -4,18 +4,18 @@ import IngredientSelector from "../Components/IngredientSelector/IngredientSelec
 import { Button } from "@material-tailwind/react";
 import IngredientCard from "../Components/IngredientCard";
 
-export interface Match {
+export interface IngredientMatch {
     matchedIngredient: string;
     recipeCount: number;
     avgOfAvgRatings: number;
 }
 
 interface QueryResult {
-    ingredients: Match[];
+    ingredients: IngredientMatch[];
 }
 
 export default function Home() {
-    const [result, setResult] = useState<Match[] | null>(null); // Typed state
+    const [result, setResult] = useState<IngredientMatch[] | null>(null); // Typed state
     const [loading, setLoading] = useState(false);
     const [ingredients, setIngredients] = useState<string[]>([]);
     const [limit, setLimit] = useState(20);
@@ -52,8 +52,8 @@ export default function Home() {
             <section className="flex items-center justify-center text-center text-white py-20">
                 <div>
                     <h2 className="text-4xl font-bold mb-4">MIX & MAX</h2>
-                    <p className="text-lg mb-8">
-                        Insert the ingredients you have, we will suggest wich ones to buy to maximize the number of recipes you can make
+                    <p className="text-lg mb-8 max-w-lg mx-auto">
+                        Insert the ingredients you have, we will suggest wich ones to buy to maximize the number of recipes you can make. Click on an ingredient to see the matched recipes.
                     </p>
                     <IngredientSelector ingredients={ingredients} setIngredients={setIngredients} runQuery={runQuery} />
                     <div className="mt-6 border-4 rounded-xl p-4">
@@ -65,9 +65,9 @@ export default function Home() {
                             </div>
                         )}
                         {result && !loading && (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div className="flex flex-wrap flex-row justify-center gap-6">
                                 {result.map((match) => (
-                                    <IngredientCard key={match.matchedIngredient} match={match} />
+                                    <IngredientCard key={match.matchedIngredient} match={match} selectedIngredients={ingredients} />
                                 ))}
                                 <Button
                                     className="col-span-full"

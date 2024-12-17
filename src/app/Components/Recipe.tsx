@@ -28,7 +28,7 @@ export default function RecipeCard({ match }: RecipeProps) {
 
     function interpretCombinedString(ingredients: string) {
         // Regular expression to extract the arguments from the function
-        const regex = /c\(([^)]+)\)/;
+        const regex = /c\(([^]+)\)/;
 
         // Match the function arguments
         const match = ingredients.match(regex);
@@ -56,9 +56,15 @@ export default function RecipeCard({ match }: RecipeProps) {
         <>
             <Card onClick={handleOpen} className="w-96 hover:scale-105 active:scale-95 duration-200" placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}>
                 <CardBody placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}>
-                    <Typography variant="h5" color="blue-gray" className="mb-2" placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}>
+                    <Typography variant="h5" color="blue-gray" className="  " placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}>
                         {match.recipe.Name}
                     </Typography>
+                    {
+                        match.recipe.AuthorName != null &&
+                        <Typography variant="h6" color="blue-gray" className="mb-2" placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}>
+                            by {match.recipe.AuthorName}
+                        </Typography>
+                    }
                     <Typography className="line-clamp-1 overflow-hidden" placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}>
                         {match.recipe.Description}
                     </Typography>
@@ -159,13 +165,18 @@ export default function RecipeCard({ match }: RecipeProps) {
                 </CardFooter>
             </Card>
 
-            <Dialog open={open} handler={handleOpen} placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}>
-                <DialogHeader placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}
+            <Dialog className="overflow-y-scroll h-[60vh]" open={open} handler={handleOpen} placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}>
+                <DialogHeader className="felx flex-col" placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}
                 >
                     {match.recipe.Name}
+                    {match.recipe.DatePublished != null &&
+                        <Typography variant="h6" color="blue-gray" className="mb-2" placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}>
+                            {new Date(match.recipe.DatePublished).toLocaleDateString()}
+                        </Typography>
+                    }
                 </DialogHeader>
                 <DialogBody placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}>
-                    <div className="text-left overflow-y-scroll h-[90%]">
+                    <div className="text-left">
 
                         {
                             match.recipe.RecipeIngredientParts !== "" &&

@@ -8,8 +8,8 @@ import {
     Tooltip,
 } from "@material-tailwind/react";
 import { useRouter } from 'next/navigation';
-import { IconType } from "react-icons";
 import React from "react";
+import { IconType } from "react-icons";
 
 
 interface FeatureCardProps {
@@ -21,6 +21,7 @@ interface FeatureCardProps {
 
 export function FeatureCard({ featureName, description, featureRoute, icon }: FeatureCardProps) {
     const router = useRouter();
+
 
     function handleClick() {
         router.push(featureRoute);

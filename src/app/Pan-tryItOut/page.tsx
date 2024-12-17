@@ -19,6 +19,8 @@ export interface Recipe {
     RecipeInstructions: string;
     AggregatedRating?: number;
     Keywords?: string;
+    DatePublished?: string;
+    AuthorName?: string;
 }
 
 export interface Match {
@@ -27,7 +29,7 @@ export interface Match {
     matchingIngredients: string[];
 }
 
-interface QueryResult {
+export interface QueryResult {
     recipes: Match[];
 }
 
@@ -69,7 +71,7 @@ export default function Home() {
             <section className="flex items-center justify-center text-center text-white py-20">
                 <div>
                     <h2 className="text-4xl font-bold mb-4">PAN-TRY IT OUT</h2>
-                    <p className="text-lg mb-8">
+                    <p className="text-lg mb-8 max-w-lg mx-auto">
                         Insert your ingredients and we will find the best recipes for you
                     </p>
                     <IngredientSelector ingredients={ingredients} setIngredients={setIngredients} runQuery={runQuery} />
@@ -82,7 +84,7 @@ export default function Home() {
                             </div>
                         )}
                         {result && !loading && (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div className="flex flex-wrap flex-row justify-center gap-6">
                                 {result.map((match) => (
                                     <RecipeCard key={match.recipe.RecipeId} match={match} />
                                 ))}
