@@ -11,6 +11,7 @@ interface IngredientSelectorProps {
 export default function IngredientSelector({ ingredients, setIngredients, runQuery }: IngredientSelectorProps) {
     const apiEndpoint = "https://taste-trios-back-end.vercel.app/api/neo4j/checkIngredient"
     const [currentIngredient, setCurrentIngredient] = useState<string>("");
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const removeIngredient = (name: string) => {
         const newIngredients = ingredients.filter((ingredient) => ingredient !== name);
         setIngredients(newIngredients);
@@ -26,6 +27,7 @@ export default function IngredientSelector({ ingredients, setIngredients, runQue
             setCurrentIngredient("");
             return;
         }
+        setIsLoading(true);
         fetch(apiEndpoint, {
             method: "POST",
             headers: {
@@ -49,9 +51,10 @@ export default function IngredientSelector({ ingredients, setIngredients, runQue
             })
             .catch((err) => {
                 console.error("Error:", err);
-                setCurrentIngredient("");
-            }
-            );
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
     }
 
     return (
@@ -85,8 +88,16 @@ export default function IngredientSelector({ ingredients, setIngredients, runQue
                         placeholder=""
                         onPointerEnterCapture={() => { }}
                         onPointerLeaveCapture={() => { }}
+                        disabled={isLoading}
                     >
-                        Add
+                        {isLoading ? (
+                            <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                            </svg>
+                        ) : (
+                            "Add"
+                        )}
                     </Button>
                 </div>
             </form>
