@@ -74,6 +74,7 @@ export default function Home() {
         exposer: (me: number) => me.toFixed(2).toString() + " stars"
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const configs: PlottablePropertyConfig<any, IngredientMatch>[] = [
         recipeCountConfig,
         avgOfAvgRatingsConfig,
