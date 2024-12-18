@@ -14,6 +14,7 @@ import { IngredientMatch } from "../Mix&Max/page";
 import { LuNewspaper } from "react-icons/lu";
 import { useState } from "react";
 import { Match, QueryResult } from "../Pan-tryItOut/page";
+import { IoGitNetworkSharp } from "react-icons/io5";
 import RecipeCard from "./Recipe";
 
 
@@ -69,6 +70,19 @@ export default function IngredientCard({ match, selectedIngredients }: Ingredien
                     </Typography>
                 </CardBody>
                 <CardFooter className="pt-0 flex gap-2 flex-wrap justify-center" placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}>
+                    <Tooltip content="Compatibility Score" placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}
+                        animate={{
+                            mount: { scale: 1, y: 0 },
+                            unmount: { scale: 0, y: 25 },
+                        }}
+                    >
+                        <Chip
+                            className="p-2  px-3"
+                            value={match.IngredientCompatibility.toFixed(2)}
+                            icon={<IoGitNetworkSharp className="text-xl" />}
+                        />
+                    </Tooltip>
+
                     <Tooltip content="Matched Recipes count" placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}
                         animate={{
                             mount: { scale: 1, y: 0 },

@@ -8,6 +8,7 @@ export interface IngredientMatch {
     matchedIngredient: string;
     recipeCount: number;
     avgOfAvgRatings: number;
+    IngredientCompatibility: number;
 }
 
 interface QueryResult {
