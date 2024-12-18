@@ -18,7 +18,7 @@ export default function Plotter<Plottable, K extends keyof Plottable>({ data, co
                 onPointerEnterCapture={() => { }}
                 onPointerLeaveCapture={() => { }}
             >
-                Matched recipes distribution
+                Distribution of matches
             </Typography>
             <div className="flex flex-row flex-wrap justify-center mb-4 gap-3">
                 {configs.map((config, index) => (
