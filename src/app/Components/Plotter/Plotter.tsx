@@ -6,8 +6,8 @@ import Formatter from './Formatter';
 import { PlottablePropertyConfig } from './Formatter';
 
 
-export default function Plotter<Plottable>({ data, configs }: { data: Plottable[], configs: PlottablePropertyConfig<any, Plottable>[] }) {
-    const [selectedConfig, setSelectedConfig] = useState<PlottablePropertyConfig<any, Plottable>>(configs[0]);
+export default function Plotter<Plottable, K extends keyof Plottable>({ data, configs }: { data: Plottable[], configs: PlottablePropertyConfig<K, Plottable>[] }) {
+    const [selectedConfig, setSelectedConfig] = useState<PlottablePropertyConfig<K, Plottable>>(configs[0]);
 
     return (
         <div className="flex flex-col border-4 rounded-xl p-4 m-2">
@@ -38,7 +38,7 @@ export default function Plotter<Plottable>({ data, configs }: { data: Plottable[
                 <BarChart
                     width={600}
                     height={300}
-                    data={new Formatter<Plottable>().formatData(data, selectedConfig)}
+                    data={new Formatter<Plottable, K>().formatData(data, selectedConfig)}
                     margin={{
                         top: 5, right: 30, left: 20, bottom: 5,
                     }}

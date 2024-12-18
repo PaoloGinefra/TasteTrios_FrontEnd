@@ -71,7 +71,7 @@ export default function Home() {
         propertyName: "DatePublished",
         nBins: 20,
         collector: (recipe: Recipe) => recipe.DatePublished ?? "",
-        qunatifier: (me: string) => new Date(me).getTime(),
+        quantifier: (me: string) => new Date(me).getTime(),
         exposer: (me: number) => new Date(me).toDateString(),
     }
 
@@ -79,7 +79,7 @@ export default function Home() {
         propertyName: "CookTime",
         nBins: 20,
         collector: (recipe: Recipe) => recipe.CookTime ?? 0,
-        qunatifier: (me: number) => me,
+        quantifier: (me: number) => me,
         exposer: (me: number) => me.toFixed(2).toString() + " minutes"
     }
 
@@ -87,7 +87,7 @@ export default function Home() {
         propertyName: "PrepTime",
         nBins: 20,
         collector: (recipe: Recipe) => recipe.PrepTime ?? 0,
-        qunatifier: (me: number) => me,
+        quantifier: (me: number) => me,
         exposer: (me: number) => me.toFixed(2).toString() + " minutes"
     }
 
@@ -95,7 +95,7 @@ export default function Home() {
         propertyName: "TotalTime",
         nBins: 20,
         collector: (recipe: Recipe) => recipe.TotalTime ?? 0,
-        qunatifier: (me: number) => me,
+        quantifier: (me: number) => me,
         exposer: (me: number) => me.toFixed(2).toString() + " minutes"
     }
 
@@ -103,7 +103,7 @@ export default function Home() {
         propertyName: "Calories",
         nBins: 20,
         collector: (recipe: Recipe) => parseFloat(recipe.Calories),
-        qunatifier: (me: number) => me,
+        quantifier: (me: number) => me,
         exposer: (me: number) => me.toFixed(2).toString() + " calories"
     }
 
@@ -111,7 +111,7 @@ export default function Home() {
         propertyName: "RecipeServings",
         nBins: 20,
         collector: (recipe: Recipe) => recipe.RecipeServings ?? 0,
-        qunatifier: (me: number) => me,
+        quantifier: (me: number) => me,
         exposer: (me: number) => me.toFixed(2).toString() + " servings"
     }
 
@@ -119,12 +119,13 @@ export default function Home() {
         propertyName: "AggregatedRating",
         nBins: 5,
         collector: (recipe: Recipe) => recipe.AggregatedRating ?? 0,
-        qunatifier: (me: number) => me,
+        quantifier: (me: number) => me,
         exposer: (me: number) => me.toFixed(2).toString() + " stars",
         minVal: 0,
         maxVal: 5
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const plottableConfigs: PlottablePropertyConfig<any, Recipe>[] = [
         publishedDateConfig,
         cookTimeConfig,

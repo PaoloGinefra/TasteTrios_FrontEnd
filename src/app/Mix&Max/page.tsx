@@ -54,7 +54,7 @@ export default function Home() {
         propertyName: "recipeCount",
         nBins: 20,
         collector: (match: IngredientMatch) => match.recipeCount,
-        qunatifier: (me: number) => me,
+        quantifier: (me: number) => me,
         exposer: (me: number) => me.toFixed(2).toString() + " matched recipes"
     };
 
@@ -62,7 +62,7 @@ export default function Home() {
         propertyName: "avgOfAvgRatings",
         nBins: 20,
         collector: (match: IngredientMatch) => match.avgOfAvgRatings,
-        qunatifier: (me: number) => me,
+        quantifier: (me: number) => me,
         exposer: (me: number) => me.toFixed(2).toString() + " stars"
     };
 
@@ -70,7 +70,7 @@ export default function Home() {
         propertyName: "IngredientCompatibility",
         nBins: 20,
         collector: (match: IngredientMatch) => match.IngredientCompatibility,
-        qunatifier: (me: number) => me,
+        quantifier: (me: number) => me,
         exposer: (me: number) => me.toFixed(2).toString() + " stars"
     };
 

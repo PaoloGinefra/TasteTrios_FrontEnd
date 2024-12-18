@@ -2,19 +2,19 @@ export interface PlottablePropertyConfig<MyType, ParentType> {
     propertyName: string;
     nBins: number;
     collector: (parent: ParentType) => MyType;
-    qunatifier: (me: MyType) => number;
+    quantifier: (me: MyType) => number;
     exposer: (me: number) => string;
     minVal?: number;
     maxVal?: number;
 }
 
 
-export default class Formatter<Type> {
-    formatData(data: Type[], plottablePropertyConfig: PlottablePropertyConfig<unknown, Type>) {
+export default class Formatter<Type, K extends keyof Type> {
+    formatData(data: Type[], plottablePropertyConfig: PlottablePropertyConfig<K, Type>) {
         const qunatifiedData = data
             .map(plottablePropertyConfig.collector)
             .filter((date) => date !== undefined)
-            .map(plottablePropertyConfig.qunatifier);
+            .map(plottablePropertyConfig.quantifier);
 
         if (qunatifiedData.length === 0) {
             return [];
