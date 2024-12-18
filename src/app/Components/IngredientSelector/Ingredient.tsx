@@ -7,7 +7,7 @@ interface IngredientProps {
 
 export default function Ingredient({ name, removeIngredient }: IngredientProps) {
     return (
-        <div className="relative inline-block">
+        <div className="relative inline-block hover:scale-105 active:scale-95 duration-200">
             <Button
                 className="text-white rounded-full px-4 py-2"
                 placeholder={undefined}

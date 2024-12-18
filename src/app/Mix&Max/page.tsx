@@ -3,6 +3,8 @@ import { useState } from "react";
 import IngredientSelector from "../Components/IngredientSelector/IngredientSelector";
 import { Button } from "@material-tailwind/react";
 import IngredientCard from "../Components/IngredientCard";
+import Plotter from "../Components/Plotter/Plotter";
+import { PlottablePropertyConfig } from "../Components/Plotter/Formatter";
 
 export interface IngredientMatch {
     matchedIngredient: string;
@@ -48,6 +50,36 @@ export default function Home() {
             });
     }
 
+    const recipeCountConfig: PlottablePropertyConfig<number, IngredientMatch> = {
+        propertyName: "recipeCount",
+        nBins: 20,
+        collector: (match: IngredientMatch) => match.recipeCount,
+        qunatifier: (me: number) => me,
+        exposer: (me: number) => me.toFixed(2).toString() + " matched recipes"
+    };
+
+    const avgOfAvgRatingsConfig: PlottablePropertyConfig<number, IngredientMatch> = {
+        propertyName: "avgOfAvgRatings",
+        nBins: 20,
+        collector: (match: IngredientMatch) => match.avgOfAvgRatings,
+        qunatifier: (me: number) => me,
+        exposer: (me: number) => me.toFixed(2).toString() + " stars"
+    };
+
+    const IngredientCompatibilityConfig: PlottablePropertyConfig<number, IngredientMatch> = {
+        propertyName: "IngredientCompatibility",
+        nBins: 20,
+        collector: (match: IngredientMatch) => match.IngredientCompatibility,
+        qunatifier: (me: number) => me,
+        exposer: (me: number) => me.toFixed(2).toString() + " stars"
+    };
+
+    const configs: PlottablePropertyConfig<any, IngredientMatch>[] = [
+        recipeCountConfig,
+        avgOfAvgRatingsConfig,
+        IngredientCompatibilityConfig
+    ]
+
     return (
         <div className="bg-black min-h-screen">
             <section className="flex items-center justify-center text-center text-white py-20">
@@ -57,6 +89,10 @@ export default function Home() {
                         Insert the ingredients you have, we will suggest wich ones to buy to maximize the number of recipes you can make. Click on an ingredient to see the matched recipes.
                     </p>
                     <IngredientSelector ingredients={ingredients} setIngredients={setIngredients} runQuery={runQuery} />
+                    <Plotter
+                        data={result ?? []}
+                        configs={configs}
+                    />
                     <div className="mt-6 border-4 rounded-xl p-4">
                         {loading && (
                             <div className="flex items-center justify-center space-x-2">

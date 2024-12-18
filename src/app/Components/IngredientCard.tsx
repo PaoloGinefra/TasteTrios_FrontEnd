@@ -114,7 +114,7 @@ export default function IngredientCard({ match, selectedIngredients }: Ingredien
             <Dialog open={open} handler={handleOpen} placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}>
                 <DialogHeader placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}
                 >
-                    {"Recepies with " + selectedIngredients.join(", ") + " and " + match.matchedIngredient}
+                    {"Recipes with " + selectedIngredients.join(", ") + " and " + match.matchedIngredient}
                 </DialogHeader>
                 <DialogBody className="overflow-y-scroll h-[60vh]" placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}>
                     <div className="text-left">

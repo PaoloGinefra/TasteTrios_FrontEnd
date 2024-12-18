@@ -3,14 +3,15 @@ import { useState } from "react";
 import RecipeCard from "../Components/Recipe";
 import IngredientSelector from "../Components/IngredientSelector/IngredientSelector";
 import { Button } from "@material-tailwind/react";
-
+import Plotter from "../Components/Plotter/Plotter";
+import { PlottablePropertyConfig } from "../Components/Plotter/Formatter";
 
 export interface Recipe {
     Calories: string;
     CookTime?: number;
     Name: string;
     PrepTime?: number;
-    RecipeServings?: string;
+    RecipeServings?: number;
     TotalTime?: number;
     RecipeId: string;
     Description: string;
@@ -66,8 +67,76 @@ export default function Home() {
             });
     }
 
+    const publishedDateConfig: PlottablePropertyConfig<string, Recipe> = {
+        propertyName: "DatePublished",
+        nBins: 20,
+        collector: (recipe: Recipe) => recipe.DatePublished ?? "",
+        qunatifier: (me: string) => new Date(me).getTime(),
+        exposer: (me: number) => new Date(me).toDateString(),
+    }
+
+    const cookTimeConfig: PlottablePropertyConfig<number, Recipe> = {
+        propertyName: "CookTime",
+        nBins: 20,
+        collector: (recipe: Recipe) => recipe.CookTime ?? 0,
+        qunatifier: (me: number) => me,
+        exposer: (me: number) => me.toFixed(2).toString() + " minutes"
+    }
+
+    const prepTimeConfig: PlottablePropertyConfig<number, Recipe> = {
+        propertyName: "PrepTime",
+        nBins: 20,
+        collector: (recipe: Recipe) => recipe.PrepTime ?? 0,
+        qunatifier: (me: number) => me,
+        exposer: (me: number) => me.toFixed(2).toString() + " minutes"
+    }
+
+    const totalTimeConfig: PlottablePropertyConfig<number, Recipe> = {
+        propertyName: "TotalTime",
+        nBins: 20,
+        collector: (recipe: Recipe) => recipe.TotalTime ?? 0,
+        qunatifier: (me: number) => me,
+        exposer: (me: number) => me.toFixed(2).toString() + " minutes"
+    }
+
+    const caloriesConfig: PlottablePropertyConfig<number, Recipe> = {
+        propertyName: "Calories",
+        nBins: 20,
+        collector: (recipe: Recipe) => parseFloat(recipe.Calories),
+        qunatifier: (me: number) => me,
+        exposer: (me: number) => me.toFixed(2).toString() + " calories"
+    }
+
+    const servingsConfig: PlottablePropertyConfig<number, Recipe> = {
+        propertyName: "RecipeServings",
+        nBins: 20,
+        collector: (recipe: Recipe) => recipe.RecipeServings ?? 0,
+        qunatifier: (me: number) => me,
+        exposer: (me: number) => me.toFixed(2).toString() + " servings"
+    }
+
+    const ratingConfig: PlottablePropertyConfig<number, Recipe> = {
+        propertyName: "AggregatedRating",
+        nBins: 5,
+        collector: (recipe: Recipe) => recipe.AggregatedRating ?? 0,
+        qunatifier: (me: number) => me,
+        exposer: (me: number) => me.toFixed(2).toString() + " stars",
+        minVal: 0,
+        maxVal: 5
+    }
+
+    const plottableConfigs: PlottablePropertyConfig<any, Recipe>[] = [
+        publishedDateConfig,
+        cookTimeConfig,
+        prepTimeConfig,
+        totalTimeConfig,
+        caloriesConfig,
+        servingsConfig,
+        ratingConfig
+    ];
+
     return (
-        <div className="bg-black min-h-screen">
+        <div className="bg-black min-h-screen" >
             <section className="flex items-center justify-center text-center text-white py-20">
                 <div>
                     <h2 className="text-4xl font-bold mb-4">PAN-TRY IT OUT</h2>
@@ -75,6 +144,10 @@ export default function Home() {
                         Insert your ingredients and we will find the best recipes for you
                     </p>
                     <IngredientSelector ingredients={ingredients} setIngredients={setIngredients} runQuery={runQuery} />
+                    <Plotter
+                        data={result !== null ? result.map(r => r.recipe) : []}
+                        configs={plottableConfigs}
+                    />
                     <div className="mt-6 border-4 rounded-xl p-4">
                         {loading && (
                             <div className="flex items-center justify-center space-x-2">
@@ -105,6 +178,6 @@ export default function Home() {
                     </div>
                 </div>
             </section>
-        </div>
+        </div >
     );
 }
