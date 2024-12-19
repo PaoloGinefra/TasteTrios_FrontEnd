@@ -36,7 +36,7 @@ export default function page() {
                 {ElasticQueriesList.map(
                     (query) => (
                         <TabPanel key={query.queryNumber} value={query.queryNumber}>
-                            <QueryResultPage queryNumber={query.queryNumber} queryDescription={query.queryDescription} />
+                            <QueryResultPage queryNumber={query.queryNumber} queryDescription={query.queryDescription} query={query.query} />
                         </TabPanel>
                     )
                 )}

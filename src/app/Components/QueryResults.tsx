@@ -4,6 +4,7 @@ import RecipeCard from "../Components/Recipe";
 import { Button } from "@material-tailwind/react";
 import Plotter from "../Components/Plotter/Plotter";
 import { PlottablePropertyConfig } from "../Components/Plotter/Formatter";
+import JsonVisualizer from "../Components/JsonVisualizer/JsonVisualizer";
 
 export interface Recipe {
     Calories: string;
@@ -36,8 +37,9 @@ export interface QueryResult {
 interface QueryResultPageProps {
     queryNumber: number;
     queryDescription: string;
+    query: object;
 }
-export default function QueryResultPage({ queryNumber, queryDescription }: QueryResultPageProps) {
+export default function QueryResultPage({ queryNumber, queryDescription, query }: QueryResultPageProps) {
     const [result, setResult] = useState<Match[] | null>(null); // Typed state
     const [loading, setLoading] = useState(false);
     const [limit, setLimit] = useState(20);
@@ -142,6 +144,9 @@ export default function QueryResultPage({ queryNumber, queryDescription }: Query
                     <p className="text-lg mb-8 max-w-lg mx-auto">
                         {queryDescription}
                     </p>
+                    <div className="mb-8 flex justify-center">
+                        <JsonVisualizer json={query} />
+                    </div>
                     <Button
                         onClick={runQuery}
                         placeholder=""
