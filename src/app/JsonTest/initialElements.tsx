@@ -1,25 +1,54 @@
-import { Node, Edge, Position } from '@xyflow/react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Node, Edge } from '@xyflow/react';
 
 const position = { x: 0, y: 0 };
 const edgeType = 'smoothstep';
 
 const json = {
-  test: 'test-content',
-  test2: 'yolo',
-  test3: {
-    test4: 'yolo2',
-    test5: {
-      test6: 'yolo3',
+  "queryResult": {
+    "took": 5,
+    "timed_out": false,
+    "_shards": {
+      "total": 1,
+      "successful": 1,
+      "skipped": 0,
+      "failed": 0
     },
-  },
-  test7: [
-    {
-      test8: 'yolo4',
-    },
-    {
-      test9: 'yolo5',
-    },
-  ]
+    "hits": {
+      "total": {
+        "value": 1,
+        "relation": "eq"
+      },
+      "max_score": 1.3862942,
+      "hits": [
+        {
+          "_index": "my-index-000001",
+          "_id": "kxWFcnMByiguvud1Z8vC",
+          "_score": 1.3862942,
+          "_source": {
+            "@timestamp": "2099-11-15T14:12:12",
+            "http": {
+              "request": {
+                "method": "get"
+              },
+              "response": {
+                "bytes": 1070000,
+                "status_code": 200
+              },
+              "version": "1.1"
+            },
+            "message": "GET /search HTTP/1.1 200 1070000",
+            "source": {
+              "ip": "127.0.0.1"
+            },
+            "user": {
+              "id": "kimchy"
+            }
+          }
+        }
+      ]
+    }
+  }
 };
 
 function isLeaf(json: any): boolean {
@@ -49,14 +78,20 @@ function processLeaf(json: any, parentId: string): Node {
   if (typeof json !== 'object') {
     return {
       id: parentId + '-value',
-      type: 'normal',
+      type: 'leaf',
       data: {
         label: json,
+        schema: [
+          {
+            name: json,
+            type: parentId.split('-').pop(),
+          },
+        ],
       },
       position,
     };
   }
-  const schema = [];
+  const schema: { name: any; type: any; }[] = [];
 
   Object.keys(json).forEach((key: any) => {
     schema.push({
@@ -67,9 +102,9 @@ function processLeaf(json: any, parentId: string): Node {
 
   return {
     id: parentId + '-value',
+    type: 'leaf',
     data: {
       label: 'leaf',
-      type: 'leaf',
       schema: schema,
     },
     position,
@@ -77,7 +112,6 @@ function processLeaf(json: any, parentId: string): Node {
 }
 
 function parseJson(json: any, nodeList: Node[], edgeList: Edge[], parentId: string | null = null) {
-  console.log(json);
   if (json === null) {
     return;
   }
@@ -98,35 +132,48 @@ function parseJson(json: any, nodeList: Node[], edgeList: Edge[], parentId: stri
 
   for (const key in json) {
     const nodeId = parentId ? `${parentId}-${key}` : key;
-    const node = {
-      id: nodeId,
-      data: { label: key },
-      position,
-    };
-    nodeList.push(node);
+    if (isLeaf(json[key])) {
+      const node = processLeaf(json[key], nodeId);
+      nodeList.push(node);
 
-    const edge: Edge = {
-      id: `${parentId}-${key}`,
-      source: parentId ? parentId : '',
-      target: nodeId,
-      type: edgeType,
-      animated: true,
-    };
-    edgeList.push(edge);
-    parseJson(json[key], nodeList, edgeList, nodeId);
+      if (parentId) {
+        const edge: Edge = {
+          id: `${parentId}-${key}-value`,
+          source: parentId ? parentId : '',
+          target: nodeId + '-value',
+          type: edgeType,
+          animated: true,
+        };
+        edgeList.push(edge);
+      }
+    }
+    else {
+      const node = {
+        id: nodeId,
+        data: { label: key },
+        position,
+      };
+      nodeList.push(node);
+
+      if (parentId) {
+        const edge: Edge = {
+          id: `${parentId}-${key}`,
+          source: parentId ? parentId : '',
+          target: nodeId,
+          type: edgeType,
+          animated: true,
+        };
+        edgeList.push(edge);
+      }
+
+      parseJson(json[key], nodeList, edgeList, nodeId);
+    }
   }
 }
 
-const nodeList: Node[] = [
-  {
-    id: 'rootNode',
-    data: { label: 'root' },
-    type: 'normal',
-    position,
-  },
-];
+const nodeList: Node[] = [];
 const edgeList: Edge[] = [];
-parseJson(json, nodeList, edgeList, 'rootNode');
+parseJson(json, nodeList, edgeList);
 
 console.log(nodeList);
 console.log(edgeList);

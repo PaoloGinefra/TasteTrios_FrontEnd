@@ -9,6 +9,8 @@ import {
     useNodesState,
     useEdgesState,
     Connection,
+    MiniMap,
+    Controls,
 } from '@xyflow/react';
 import dagre from '@dagrejs/dagre';
 
@@ -16,12 +18,16 @@ import '@xyflow/react/dist/style.css';
 
 import { initialNodes, initialEdges } from './initialElements';
 import { Node, Edge, Position } from '@xyflow/react';
-import { DatabaseSchemaNode } from "@/components/database-schema-node";
+import LeafNode from './LeafNode';
 
 const dagreGraph = new dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
 
 const nodeWidth = 172;
 const nodeHeight = 36;
+
+const nodeTypes = {
+    'leaf': LeafNode,
+}
 
 const getLayoutedElements = (nodes: Node[], edges: Edge[], direction = 'LR') => {
     const isHorizontal = direction === 'LR';
@@ -98,15 +104,14 @@ const Flow = () => {
                 connectionLineType={ConnectionLineType.SmoothStep}
                 fitView
                 style={{ backgroundColor: "#F7F9FB", height: "100vh", width: "100vw" }}
-                nodeTypes={{
-                    leaf: DatabaseSchemaNode,
-                    normal: Node,
-                }}
+                nodeTypes={nodeTypes}
             >
                 <Panel position="top-right">
                     <button onClick={() => onLayout('TB')}>vertical layout</button>
                     <button onClick={() => onLayout('LR')}>horizontal layout</button>
                 </Panel>
+                <MiniMap />
+                <Controls />
                 <Background />
             </ReactFlow>
         </div>
