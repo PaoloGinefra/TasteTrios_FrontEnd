@@ -145,7 +145,7 @@ export default function QueryResultPage({ queryNumber, queryDescription, query }
                         {queryDescription}
                     </p>
                     <div className="mb-8 flex justify-center">
-                        <JsonVisualizer json={query} />
+                        <JsonVisualizer json={{ "_search": query }} />
                     </div>
                     <Button
                         onClick={runQuery}
