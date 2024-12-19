@@ -11,7 +11,7 @@ export default function Home() {
         <div>
           <h2 className="text-4xl font-bold mb-4">TASTE TRIOS</h2>
           <p className="text-lg mb-8">
-            Your one-stop solution for modern web design and development.
+            The data driven approach to finding recipes
           </p>
           <div className="flex flex-wrap flex-row justify-center gap-6">
             <FeatureCard featureName="Pan-try It Out" description="This app lets you find recipes based on the ingredients you have around" featureRoute="/Pan-tryItOut" icon={FaSearch} />
