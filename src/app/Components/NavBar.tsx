@@ -69,7 +69,7 @@ export default function NavBar() {
         >
             <div className="flex items-center justify-between">
                 <Typography
-                    className="mr-4 cursor-pointer py-1.5 font-medium font-bold"
+                    className="mr-4 cursor-pointer py-1.5 font-bold"
                     variant="h4"
                     placeholder=""
                     onPointerEnterCapture={() => { }}
