@@ -103,7 +103,7 @@ export default function JsonVisualizer({ json }: FlowProps) {
     );
 
     return (
-        <div style={{ height: 500, width: 700 }} className='text-black mx-auto rounded-xl overflow-hidden'>
+        <div className='text-black mx-auto rounded-xl overflow-hidden' style={{ height: '60vh', width: '100%', maxWidth: '1200px' }}>
             <ReactFlow
                 nodes={nodes}
                 edges={edges}
@@ -112,7 +112,7 @@ export default function JsonVisualizer({ json }: FlowProps) {
                 onConnect={onConnect}
                 connectionLineType={ConnectionLineType.SmoothStep}
                 fitView
-                style={{ backgroundColor: "#F7F9FB", height: "100vh", width: "100vw" }}
+                style={{ backgroundColor: "#F7F9FB" }}
                 nodeTypes={nodeTypes}
             >
                 <Panel position="top-right">
