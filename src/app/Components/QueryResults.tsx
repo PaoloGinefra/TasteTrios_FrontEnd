@@ -138,7 +138,7 @@ export default function QueryResultPage({ queryNumber, queryDescription, query }
 
     return (
         <div className="bg-black min-h-screen" >
-            <section className="flex items-center justify-center text-center text-white py-20">
+            <section className="flex items-center justify-center text-center text-white pb-20">
                 <div>
                     <h2 className="text-4xl font-bold mb-4">QUERY #{queryNumber + 1}</h2>
                     <p className="text-lg mb-8 max-w-lg mx-auto">
