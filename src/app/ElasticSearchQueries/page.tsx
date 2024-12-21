@@ -16,7 +16,7 @@ export default function page() {
             <NavBar />
             <div>
                 <Tabs id="custom-animation" value="0" orientation="horizontal">
-                    <TabsHeader className="h-full" placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}>
+                    <TabsHeader className="h-full m-2" placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }}>
                         {ElasticQueriesList.map(
                             (query) => (
                                 <Tab key={query.queryNumber} value={query.queryNumber}
