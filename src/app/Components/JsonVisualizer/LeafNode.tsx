@@ -1,6 +1,7 @@
 "use client"; // This is a client component
 import { Handle, Position } from '@xyflow/react';
 import { LeafContent } from './jsonParser';
+import { Typography } from '@material-tailwind/react';
 interface LeafNodeProps {
     data: {
         contents: LeafContent[];
@@ -16,9 +17,19 @@ export default function LeafNode({ data }: LeafNodeProps) {
             <div className='text-left'>
                 {data.contents.map((content) => (
                     <div key={content.name} className='flex flex-row'>
-                        <p>{content.name}</p>
+                        <Typography variant="small" className='font-bold'
+                            placeholder=""
+                            onPointerEnterCapture={() => { }}
+                            onPointerLeaveCapture={() => { }}>
+                            {content.name}
+                        </Typography>
                         :&nbsp;
-                        <p className='ml-2'>{content.value}</p>
+                        <Typography variant="small"
+                            placeholder=""
+                            onPointerEnterCapture={() => { }}
+                            onPointerLeaveCapture={() => { }}>
+                            {content.value}
+                        </Typography>
                     </div>
                 ))}
             </div>
