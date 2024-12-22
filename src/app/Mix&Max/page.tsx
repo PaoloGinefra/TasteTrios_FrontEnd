@@ -6,6 +6,7 @@ import IngredientCard from "../Components/IngredientCard";
 import Plotter from "../Components/Plotter/Plotter";
 import { PlottablePropertyConfig } from "../Components/Plotter/Formatter";
 import NavBar from "../Components/NavBar";
+import { FaCartArrowDown } from "react-icons/fa";
 
 export interface IngredientMatch {
     matchedIngredient: string;
@@ -85,8 +86,11 @@ export default function Home() {
     return (
         <div className="bg-black min-h-screen">
             <NavBar />
-            <section className="flex items-center justify-center text-center text-white py-20">
+            <section className="flex items-center justify-center text-center text-white pt-10">
                 <div>
+                    <div className="flex align-middle justify-center text-9xl ">
+                        <FaCartArrowDown />
+                    </div>
                     <h2 className="text-4xl font-bold mb-4">MIX & MAX</h2>
                     <p className="text-lg mb-8 max-w-lg mx-auto">
                         Insert the ingredients you have, we will suggest wich ones to buy to maximize the number of recipes you can make. Click on an ingredient to see the matched recipes.

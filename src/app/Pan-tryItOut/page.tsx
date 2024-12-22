@@ -6,6 +6,8 @@ import { Button } from "@material-tailwind/react";
 import Plotter from "../Components/Plotter/Plotter";
 import { PlottablePropertyConfig } from "../Components/Plotter/Formatter";
 import NavBar from "../Components/NavBar";
+import { FaSearch } from "react-icons/fa";
+
 
 export interface Recipe {
     Calories: string;
@@ -140,8 +142,11 @@ export default function Home() {
     return (
         <div className="bg-black min-h-screen" >
             <NavBar />
-            <section className="flex items-center justify-center text-center text-white py-20">
+            <section className="flex items-center justify-center text-center text-white py-10">
                 <div>
+                    <div className="flex align-middle justify-center text-9xl mb-2">
+                        <FaSearch />
+                    </div>
                     <h2 className="text-4xl font-bold mb-4">PAN-TRY IT OUT</h2>
                     <p className="text-lg mb-8 max-w-lg mx-auto">
                         Insert your ingredients and we will find the best recipes for you
