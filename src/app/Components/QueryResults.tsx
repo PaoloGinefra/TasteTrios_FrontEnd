@@ -30,8 +30,17 @@ export interface Match {
     matchingIngredients: string[];
 }
 
-export interface QueryResult {
+export interface StandardQueryResult {
     recipes: Match[];
+}
+
+export interface AggQueryResult {
+    aggregations: object;
+}
+
+export interface QueryResult {
+    recipes?: Match[];
+    aggregations?: object;
 }
 
 interface QueryResultPageProps {
@@ -41,6 +50,7 @@ interface QueryResultPageProps {
 }
 export default function QueryResultPage({ queryNumber, queryDescription, query }: QueryResultPageProps) {
     const [result, setResult] = useState<Match[] | null>(null); // Typed state
+    const [aggregations, setAggregations] = useState<object | null>(null); // New state for aggregations
     const [loading, setLoading] = useState(false);
     const [limit, setLimit] = useState(20);
     const apiEndpoint = "https://taste-trios-back-end.vercel.app/api/elasticsearch/queries?queryNumber=" + queryNumber + "&limit=" + limit;
@@ -57,7 +67,12 @@ export default function QueryResultPage({ queryNumber, queryDescription, query }
             .then((res) => res.json())
             .then((data: QueryResult) => {
                 console.log("Data:", data);
-                setResult(data.recipes);
+                if (data.recipes) {
+                    setResult(data.recipes);
+                }
+                if (data.aggregations) {
+                    setAggregations(data.aggregations);
+                }
             })
             .catch((err) => {
                 console.error("Error:", err);
@@ -139,7 +154,7 @@ export default function QueryResultPage({ queryNumber, queryDescription, query }
     return (
         <div className="bg-black min-h-screen" >
             <section className="flex items-center justify-center text-center text-white pb-20">
-                <div>
+                <div className="min-w-full">
                     <h2 className="text-4xl font-bold mb-4">QUERY #{queryNumber + 1}</h2>
                     <p className="text-lg mb-8 max-w-lg mx-auto">
                         {queryDescription}
@@ -159,38 +174,46 @@ export default function QueryResultPage({ queryNumber, queryDescription, query }
                             loading ? "Loading..." : "Run Query"
                         }
                     </Button>
-                    <Plotter
-                        data={result !== null ? result.map(r => r.recipe) : []}
-                        configs={plottableConfigs}
-                    />
-                    <div className="mt-6 border-4 rounded-xl p-4">
-                        {loading && (
-                            <div className="flex items-center justify-center space-x-2">
-                                <div className="w-4 h-4 rounded-full bg-white animate-pulse"></div>
-                                <div className="w-4 h-4 rounded-full bg-white animate-pulse delay-200"></div>
-                                <div className="w-4 h-4 rounded-full bg-white animate-pulse delay-400"></div>
+                    {loading && (
+                        <div className="flex items-center justify-center space-x-2">
+                            <div className="w-4 h-4 rounded-full bg-white animate-pulse"></div>
+                            <div className="w-4 h-4 rounded-full bg-white animate-pulse delay-200"></div>
+                            <div className="w-4 h-4 rounded-full bg-white animate-pulse delay-400"></div>
+                        </div>
+                    )}
+                    {result && !loading && (
+                        <div>
+                            <Plotter
+                                data={result !== null ? result.map(r => r.recipe) : []}
+                                configs={plottableConfigs}
+                            />
+                            <div className="mt-6 border-4 rounded-xl p-4">
+                                <div className="flex flex-wrap flex-row justify-center gap-6">
+                                    {result.map((match) => (
+                                        <RecipeCard key={match.recipe.RecipeId} match={match} />
+                                    ))}
+                                    <Button
+                                        className="col-span-full"
+                                        onClick={() => {
+                                            setLimit((prev) => prev + 10)
+                                            runQuery();
+                                        }}
+                                        placeholder=""
+                                        onPointerEnterCapture={() => { }}
+                                        onPointerLeaveCapture={() => { }}
+                                    >
+                                        Load More
+                                    </Button>
+                                </div>
                             </div>
-                        )}
-                        {result && !loading && (
-                            <div className="flex flex-wrap flex-row justify-center gap-6">
-                                {result.map((match) => (
-                                    <RecipeCard key={match.recipe.RecipeId} match={match} />
-                                ))}
-                                <Button
-                                    className="col-span-full"
-                                    onClick={() => {
-                                        setLimit((prev) => prev + 10)
-                                        runQuery();
-                                    }}
-                                    placeholder=""
-                                    onPointerEnterCapture={() => { }}
-                                    onPointerLeaveCapture={() => { }}
-                                >
-                                    Load More
-                                </Button>
-                            </div>
-                        )}
-                    </div>
+
+                        </div>)}
+                    {aggregations && !loading && (
+                        <div className="mt-6">
+                            <h3 className="text-2xl font-bold mb-4">Aggregations</h3>
+                            <JsonVisualizer json={aggregations} />
+                        </div>
+                    )}
                 </div>
             </section>
         </div >
