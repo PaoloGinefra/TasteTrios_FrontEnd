@@ -3,7 +3,6 @@ import {
     Navbar,
     Collapse,
     Typography,
-    Button,
     IconButton,
 } from "@material-tailwind/react";
 import React from "react";
