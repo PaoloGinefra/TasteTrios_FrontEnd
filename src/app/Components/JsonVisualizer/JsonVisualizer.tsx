@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"; // This is a client component
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import {
     Background,
     ReactFlow,
@@ -36,7 +36,7 @@ interface FlowProps {
 export default function JsonVisualizer({ json }: FlowProps) {
     const [layoutDirection, setLayoutDirection] = React.useState('LR');
 
-    const getLayoutedElements = (json: any, direction = 'LR') => {
+    const getLayoutedElements = useCallback((json: any, direction = 'LR') => {
         const elements = parseJsonToElements(json);
         const { nodes, edges } = elements;
 
@@ -73,9 +73,9 @@ export default function JsonVisualizer({ json }: FlowProps) {
         });
 
         return { nodes: newNodes, edges };
-    };
+    }, []);
 
-    const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(json);
+    const { nodes: layoutedNodes, edges: layoutedEdges } = useMemo(() => getLayoutedElements(json), [json, getLayoutedElements]);
 
     const [nodes, setNodes, onNodesChange] = useNodesState(layoutedNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
@@ -90,6 +90,7 @@ export default function JsonVisualizer({ json }: FlowProps) {
             ),
         [],
     );
+
     const onLayout = useCallback(
         (direction: string) => {
             const { nodes: layoutedNodes, edges: layoutedEdges } =
@@ -99,7 +100,7 @@ export default function JsonVisualizer({ json }: FlowProps) {
             setEdges([...layoutedEdges]);
             setLayoutDirection(direction);
         },
-        [json],
+        [json, getLayoutedElements],
     );
 
     return (
