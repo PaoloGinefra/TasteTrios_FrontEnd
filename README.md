@@ -1,5 +1,5 @@
 # Taste Trios front end
-This is the front end of the "Taste trios" application developed for the SMBUD project 2024
+This is the front end of the "Taste trios" application developed for the SMBUD project 2024. It is a simple webapp to showcase the functionalities of the NoSql databases instances developed during the project.
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
